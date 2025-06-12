@@ -1,0 +1,30 @@
+name: Check for Forbidden File Types
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  filetype-scan:
+    name: Block sensitive file types
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan for forbidden file extensions
+        run: |
+          echo "🔍 Scanning for forbidden file types..."
+          FORBIDDEN_REGEX='\.(csv|xlsx|sav|RData|env|pem|key|pfx|sqlite)$'
+          MATCHES=$(git ls-files | grep -E "$FORBIDDEN_REGEX" || true)
+          if [ -n "$MATCHES" ]; then
+            echo "::error title=Forbidden file types detected::The following sensitive files were found:"
+            echo "$MATCHES"
+            exit 1
+          else
+            echo "✅ No forbidden file types found."
+          fi
+        shell: bash
