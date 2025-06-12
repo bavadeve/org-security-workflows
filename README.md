@@ -23,4 +23,4 @@ on:
 
 jobs:
   check:
-    uses: your-org/org-security-workflows/.github/workflows/check-forbidden-filetypes.yml@main
+    uses: bavadeve/org-security-workflows/.github/workflows/check-forbidden-filetypes.yml@main
