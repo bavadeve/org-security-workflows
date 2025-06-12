@@ -1,16 +1,11 @@
 name: Check for Forbidden File Types
 
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
+  workflow_call:  # 👈 this is what makes it reusable
 
 jobs:
   filetype-scan:
-    name: Block sensitive file types
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,4 +22,3 @@ jobs:
           else
             echo "✅ No forbidden file types found."
           fi
-        shell: bash
