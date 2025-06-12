@@ -1,7 +1,7 @@
 name: Check for Forbidden File Types
 
 on:
-  workflow_call:  # 👈 this is what makes it reusable
+  workflow_call:  
 
 jobs:
   filetype-scan:
