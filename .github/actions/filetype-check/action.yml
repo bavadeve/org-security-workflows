@@ -1,0 +1,42 @@
+name: Filetype Check
+description: Fails if forbidden file types are found in the Git history
+
+inputs:
+  extension-list-path:
+    description: 'Path to the forbidden extension list file (one extension per line, no dots)'
+    required: false
+    default: '.github/forbidden-extensions.txt'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run file type check
+      shell: bash
+      run: |
+        EXT_FILE="${{ inputs.extension-list-path }}"
+        echo "Using extension list at: $EXT_FILE"
+
+        if [ ! -f "$EXT_FILE" ]; then
+          echo "::error title=Missing Extension List::The file '$EXT_FILE' does not exist."
+          exit 1
+        fi
+
+        COUNT=$(wc -l < "$EXT_FILE")
+        if [ "$COUNT" -lt 2 ]; then
+          echo "::error title=Suspicious Extension List::The list seems too short to be valid."
+          cat "$EXT_FILE"
+          exit 1
+        fi
+
+        REGEX=$(paste -sd'|' "$EXT_FILE")
+        echo "Compiled regex: \\.($REGEX)$"
+
+        MATCHES=$(git ls-files | grep -Ei "\\.($REGEX)$" || true)
+
+        if [ -n "$MATCHES" ]; then
+          echo "::error title=Forbidden file types detected::"
+          echo "$MATCHES"
+          exit 1
+        else
+          echo "No forbidden file types found."
+        fi
