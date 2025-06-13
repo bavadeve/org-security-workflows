@@ -1,15 +1,16 @@
-name: Security Scan
+name: Check Forbidden Filetypes
 
 on:
   workflow_call:
 
 jobs:
-  check-filetypes:
-    name: Check for Forbidden File Types
+  check:
+    name: Check for forbidden filetypes
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run filetype check action
-        uses: ./.github/actions/filetype-check
+      - name: Run filetype check
+        uses: bavadeve/org-security-workflows/filetype-check@main
