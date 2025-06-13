@@ -17,7 +17,7 @@ runs:
         if [ -n "${{ inputs.extension-list-path }}" ]; then
           EXT_FILE="${{ inputs.extension-list-path }}"
         else
-          EXT_FILE="${GITHUB_ACTION_PATH}/forbidden-extensions.txt"
+          EXT_FILE="${GITHUB_ACTION_PATH}/../forbidden-extensions.txt"
         fi
 
         echo "Using extension list at: $EXT_FILE"

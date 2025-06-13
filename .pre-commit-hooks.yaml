@@ -1,0 +1,6 @@
+- id: check-forbidden-filetypes
+  name: Check forbidden file extensions
+  entry: pre-commit-check/check-filetypes.sh
+  language: script
+  files: .*
+  always_run: true
