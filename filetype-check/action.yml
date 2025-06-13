@@ -5,7 +5,7 @@ inputs:
   extension-list-path:
     description: 'Path to the forbidden extension list file (one extension per line, no dots)'
     required: false
-    default: '.github/forbidden-extensions.txt'
+    default: ''
 
 runs:
   using: "composite"
@@ -13,7 +13,13 @@ runs:
     - name: Run file type check
       shell: bash
       run: |
-        EXT_FILE="${{ inputs.extension-list-path }}"
+        # Default to internal extension list if no input is given
+        if [ -n "${{ inputs.extension-list-path }}" ]; then
+          EXT_FILE="${{ inputs.extension-list-path }}"
+        else
+          EXT_FILE="${GITHUB_ACTION_PATH}/forbidden-extensions.txt"
+        fi
+
         echo "Using extension list at: $EXT_FILE"
 
         if [ ! -f "$EXT_FILE" ]; then
