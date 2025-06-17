@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Check that we're running in a Unix-like shell
+# Path to the extension list relative to this script
+EXT_FILE="$(dirname "${BASH_SOURCE[0]}")/../forbidden-extensions.txt"
+
+# Check shell compatibility
 if ! command -v grep >/dev/null || ! command -v paste >/dev/null; then
-  echo "[ERROR] This pre-commit hook requires a Unix-like shell environment."
-  echo "Please use Git Bash (Windows), WSL, or a Unix-based system."
+  echo "[ERROR] This hook requires a Unix-like shell environment (e.g. Git Bash or WSL)."
   exit 1
 fi
-
-EXT_FILE="$(dirname "${BASH_SOURCE[0]}")/../forbidden-extensions.txt"
 
 if [ ! -f "$EXT_FILE" ]; then
   echo "[ERROR] Forbidden extensions list not found at $EXT_FILE"
