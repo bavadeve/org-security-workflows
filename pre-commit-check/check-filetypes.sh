@@ -28,7 +28,7 @@ if [ -z "$CLEANED" ]; then
   exit 1
 fi
 
-REGEX=$(printf "%s\n" "$CLEANED" | paste -sd'|')
+REGEX=$(printf "%s\n" "$CLEANED" | paste -s -d '|')
 
 echo "[INFO] Checking for forbidden extensions: .$REGEX"
 
