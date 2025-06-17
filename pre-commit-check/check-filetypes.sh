@@ -21,7 +21,7 @@ if [ "$COUNT" -lt 2 ]; then
   exit 1
 fi
 
-REGEX=$(paste -sd'|' "$EXT_FILE")
+REGEX=$(grep -vE '^\s*#|^\s*$' "$EXT_FILE" | paste -sd'|')
 echo "[INFO] Checking for forbidden extensions: .$REGEX"
 
 echo "[DEBUG] Compiled regex: \.($REGEX)$"
