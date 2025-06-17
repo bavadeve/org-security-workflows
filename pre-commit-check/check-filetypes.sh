@@ -21,14 +21,12 @@ if [ "$COUNT" -lt 2 ]; then
   exit 1
 fi
 
-CLEANED=$(grep -vE '^\s*#|^\s*$' "$EXT_FILE" | tr -d '\r')
+REGEX=$(grep -vE '^\s*#|^\s*$' "$EXT_FILE" | tr -d '\r' | tr '\n' '|' | sed 's/|$//')
 
-if [ -z "$CLEANED" ]; then
+if [ -z "$REGEX" ]; then
   echo "[ERROR] No usable extensions found in $EXT_FILE"
   exit 1
 fi
-
-REGEX=$(printf "%s\n" "$CLEANED" | paste -s -d '|')
 
 echo "[INFO] Checking for forbidden extensions: .$REGEX"
 
