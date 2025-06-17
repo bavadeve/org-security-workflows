@@ -24,6 +24,10 @@ fi
 REGEX=$(paste -sd'|' "$EXT_FILE")
 echo "[INFO] Checking for forbidden extensions: .$REGEX"
 
+echo "[DEBUG] Compiled regex: \.($REGEX)$"
+echo "[DEBUG] Files passed to hook:"
+printf '%s\n' "$@"
+
 FOUND=0
 for FILE in "$@"; do
   if [[ "$FILE" =~ \.($REGEX)$ ]]; then
@@ -31,10 +35,5 @@ for FILE in "$@"; do
     FOUND=1
   fi
 done
-
-if [ "$FOUND" -eq 0 ]; then
-  echo "[ERROR] This is a simulated hit. Something may be wrong with your REGEX check."
-  FOUND=1
-fi
 
 exit $FOUND
