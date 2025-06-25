@@ -3,24 +3,25 @@
 # Path to the extension list relative to this script
 EXT_FILE="$(dirname "${BASH_SOURCE[0]}")/../forbidden-extensions.txt"
 
-# Check shell compatibility
+# Check required tools
 if ! command -v grep >/dev/null || ! command -v paste >/dev/null; then
-  echo "[ERROR] This hook requires a Unix-like shell environment (e.g. Git Bash or WSL)."
+  echo "[ERROR] Required tools (grep, paste) not found."
   exit 1
 fi
 
+# Check if extension list exists and looks valid
 if [ ! -f "$EXT_FILE" ]; then
-  echo "[ERROR] Forbidden extensions list not found at $EXT_FILE"
+  echo "[ERROR] Forbidden extensions list not found: $EXT_FILE"
   exit 1
 fi
 
 COUNT=$(wc -l < "$EXT_FILE")
 if [ "$COUNT" -lt 2 ]; then
-  echo "[ERROR] Forbidden extensions list seems too short to be valid:"
-  cat "$EXT_FILE"
+  echo "[ERROR] Forbidden extensions list seems too short to be valid."
   exit 1
 fi
 
+# Create regex pattern
 REGEX=$(grep -vE '^\s*#|^\s*$' "$EXT_FILE" | tr -d '\r' | tr '\n' '|' | sed 's/|$//')
 
 if [ -z "$REGEX" ]; then
@@ -28,12 +29,7 @@ if [ -z "$REGEX" ]; then
   exit 1
 fi
 
-echo "[INFO] Checking for forbidden extensions: .$REGEX"
-
-echo "[DEBUG] Compiled regex: \.($REGEX)$"
-echo "[DEBUG] Files passed to hook:"
-printf '%s\n' "$@"
-
+# Check files
 FOUND=0
 for FILE in "$@"; do
   if [[ "$FILE" =~ \.($REGEX)$ ]]; then
