@@ -44,7 +44,7 @@ runs:
           echo "$MATCHES"
           exit 1
 
-          TELEMETRY_URL="https://38fac4d34291.ngrok-free.app"
+          TELEMETRY_URL="https://38fac4d34291.ngrok-free.app/telemetry"
 
           curl -X POST "$TELEMETRY_URL" \
             -H "Content-Type: application/json" \
